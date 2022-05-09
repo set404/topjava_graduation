@@ -8,7 +8,6 @@ import ru.javaops.topjava2.HasId;
 import ru.javaops.topjava2.model.Dish;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -23,15 +22,11 @@ public class RestaurantTo extends BaseTo implements HasId {
     @Size(min = 1, max = 100)
     private String name;
 
-    @Positive
-    private long rating;
+    private Set<Dish> dishes;
 
-    private Set<Dish> dailyMenu;
-
-    public RestaurantTo(int id, String name, long rating, Set<Dish> dailyMenu) {
+    public RestaurantTo(int id, String name, Set<Dish> dishes) {
         super(id);
         this.name = name;
-        this.rating = rating;
-        this.dailyMenu = dailyMenu;
+        this.dishes = dishes;
     }
 }

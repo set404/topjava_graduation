@@ -34,6 +34,7 @@ CREATE TABLE RESTAURANT
 CREATE TABLE DISH
 (
     id            INTEGER DEFAULT nextval('global_seq') PRIMARY KEY,
+    date          DATE DEFAULT now() NOT NULL,
     name          VARCHAR(255) NOT NULL,
     price         DOUBLE       NOT NULL,
     restaurant_id INTEGER      NOT NULL,

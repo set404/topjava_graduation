@@ -20,13 +20,13 @@ VALUES ('Ollis'),
        ('2berega'),
        ('larisuvannuhochu');
 
-INSERT INTO DISH (name, price, restaurant_id)
-VALUES ('Borsh', 200, 100002),
-       ('Pizza', 700, 100002),
-       ('Sushi', 500, 100003),
-       ('Burger', 600, 100003),
-       ('Shawerma', 150, 100004),
-       ('Potatoes Free', 100, 100004);
+INSERT INTO DISH (date, name, price, restaurant_id)
+VALUES (now(), 'Borsh', 200, 100002),
+       (now(), 'Pizza', 700, 100002),
+       (now(), 'Sushi', 500, 100003),
+       (now(), 'Burger', 600, 100003),
+       (now(), 'Shawerma', 150, 100004),
+       (now(), 'Potatoes Free', 100, 100004);
 
 INSERT INTO VOTE (date, user_id, restaurant_id)
 VALUES (now(), 100000, 100002),
