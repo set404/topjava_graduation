@@ -3,8 +3,10 @@ package ru.javaops.topjava2.web.restaurant;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.to.RestaurantTo;
 import ru.javaops.topjava2.util.RestaurantUtil;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserRestaurantController {
 
-    static final String REST_URL = "/api/restaurants";
+    static final String REST_URL = "/api/restaurant";
 
     private final RestaurantRepository repository;
 
