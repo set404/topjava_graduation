@@ -2,7 +2,6 @@ package ru.javaops.topjava2.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
-import ru.javaops.topjava2.error.IllegalRequestDataException;
 import ru.javaops.topjava2.model.Dish;
 
 import java.time.LocalDate;
@@ -21,8 +20,7 @@ public interface DishRepository extends BaseRepository<Dish> {
     @Query("SELECT d FROM Dish d WHERE d.restaurant.id=?1 ORDER BY d.date DESC, d.price DESC")
     List<Dish> getAll(int restaurantId);
 
-    default Dish checkBelong(int id, int restaurantId) {
-        return get(id, restaurantId).orElseThrow(
-                () -> new IllegalRequestDataException("Dish id=" + id + " doesn't belong to Restaurant id=" + restaurantId));
+    default Optional<Dish> checkBelong(int id, int restaurantId) {
+        return get(id, restaurantId);
     }
 }

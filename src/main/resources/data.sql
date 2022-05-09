@@ -1,19 +1,11 @@
-DELETE FROM USERS;
-DELETE FROM USER_ROLES;
-DELETE FROM RESTAURANT;
-DELETE FROM DISH;
-DELETE FROM VOTE;
-ALTER SEQUENCE global_seq RESTART WITH 100000;
-
-
 INSERT INTO USERS (email, name, password)
 VALUES ('user@ya.ru', 'User', '{noop}password'),
        ('admin@ya.ru', 'Admin', '{noop}password');
 
 INSERT INTO USER_ROLES (role, user_id)
-VALUES ('USER', 100000),
-       ('USER', 100001),
-       ('ADMIN', 100001);
+VALUES ('USER', 1),
+       ('USER', 2),
+       ('ADMIN', 2);
 
 INSERT INTO RESTAURANT (name)
 VALUES ('Ollis'),
@@ -21,13 +13,13 @@ VALUES ('Ollis'),
        ('larisuvannuhochu');
 
 INSERT INTO DISH (date, name, price, restaurant_id)
-VALUES (now(), 'Borsh', 200, 100002),
-       (now(), 'Pizza', 700, 100002),
-       (now(), 'Sushi', 500, 100003),
-       (now(), 'Burger', 600, 100003),
-       (now(), 'Shawerma', 150, 100004),
-       (now(), 'Potatoes Free', 100, 100004);
+VALUES (now(), 'Borsh', 200, 1),
+       (now(), 'Pizza', 700, 1),
+       (now(), 'Sushi', 500, 2),
+       (now(), 'Burger', 600, 2),
+       (now(), 'Shawerma', 150, 3),
+       (now(), 'Potatoes Free', 100, 3);
 
 INSERT INTO VOTE (date, user_id, restaurant_id)
-VALUES (now(), 100000, 100002),
-       (now(), 100001, 100003);
+VALUES (now(), 1, 1),
+       (now(), 2, 3);

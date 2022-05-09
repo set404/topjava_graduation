@@ -13,11 +13,11 @@ import java.util.Optional;
 public interface RestaurantRepository extends BaseRepository<Restaurant> {
     @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r JOIN FETCH r.dishes d WHERE d.date=:date ORDER BY r.name")
-    List<Restaurant> getAllByDateWithMenu(LocalDate date);
+    List<Restaurant> getAllByDateWithDishes(LocalDate date);
 
     @EntityGraph(attributePaths = {"dishes"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r JOIN FETCH r.dishes d WHERE d.date=:date AND r.id=:id")
-    Optional<Restaurant> getByIdAndDateWithMenu(int id, LocalDate date);
+    Optional<Restaurant> getByIdAndDateWithDishes(int id, LocalDate date);
 
 
 }

@@ -11,7 +11,7 @@ public class RestaurantUtil {
     }
 
     public static RestaurantTo createTo(Restaurant restaurant) {
-        return new RestaurantTo(restaurant.getId(), restaurant.getName(), restaurant.getDishes());
+        return new RestaurantTo(restaurant.id(), restaurant.getName(), DishUtil.getTos(restaurant.getDishes()));
     }
 
     public static List<RestaurantTo> getTos(List<Restaurant> restaurantList) {
