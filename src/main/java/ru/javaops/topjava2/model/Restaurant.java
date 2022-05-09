@@ -1,48 +1,28 @@
 package ru.javaops.topjava2.model;
-
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
-@Table(name = "restaurant")
+@Table(name = "restaurant", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurant_name_idx")})
+@Getter
+@Setter
+@ToString(callSuper = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Restaurant extends NamedEntity {
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-    @OrderBy("name DESC")
-    @JsonManagedReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Dish> dishes;
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.LAZY)
-    @OrderBy("date DESC")
-    @JsonManagedReference
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Set<Vote> votes;
-
-    public Restaurant() {
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
+    @OnDelete(action = OnDeleteAction.CASCADE) //https://stackoverflow.com/a/44988100/548473
+    @JsonIgnore
+    @ToString.Exclude
+    @OrderBy("price DESC")
+    private List<Dish> dishes;
 
     public Restaurant(Integer id, String name) {
         super(id, name);
-    }
-
-    public Set<Dish> getDishes() {
-        return dishes;
-    }
-
-    public void setDishes(Set<Dish> dishes) {
-        this.dishes = dishes;
-    }
-
-    public Set<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(Set<Vote> votes) {
-        this.votes = votes;
     }
 }

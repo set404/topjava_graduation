@@ -1,32 +1,19 @@
 package ru.javaops.topjava2.to;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.javaops.topjava2.HasId;
 import ru.javaops.topjava2.model.Dish;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.Set;
 
+@Value
 @EqualsAndHashCode(callSuper = true)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class RestaurantTo extends BaseTo implements HasId {
-    private static final long serialVersionUID = 1L;
-
-    @NotBlank
-    @Size(min = 1, max = 100)
-    private String name;
-
-    private Set<Dish> dishes;
+@ToString(callSuper = true)
+public class RestaurantTo extends NamedTo implements HasId {
+    Set<Dish> dishes;
 
     public RestaurantTo(int id, String name, Set<Dish> dishes) {
-        super(id);
-        this.name = name;
+        super(id, name);
         this.dishes = dishes;
     }
 }

@@ -1,66 +1,42 @@
 package ru.javaops.topjava2.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.format.annotation.DateTimeFormat;
-import ru.javaops.topjava2.util.DateTimeUtil;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"}, name = "vote_date_user_idx")})
+@Table(name = "vote", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date"}, name = "vote_unique_user_date_idx")})
+@Getter
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@ToString(callSuper = true)
 public class Vote extends BaseEntity {
-    @Column(name = "date", nullable = false)
+
+    @Column(name = "date", nullable = false, columnDefinition = "date default now()")
     @NotNull
-    @DateTimeFormat(pattern = DateTimeUtil.DATE_PATTERN)
     private LocalDate date;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @ToString.Exclude
+    @NotNull
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonBackReference
-    @NotNull
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
+    @ToString.Exclude
     private Restaurant restaurant;
 
-    public Vote() {
-    }
-
-    public Vote(LocalDate date, User user, Restaurant restaurant) {
+    public Vote(Integer id, LocalDate date) {
+        super(id);
         this.date = date;
-        this.user = user;
-        this.restaurant = restaurant;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Restaurant getRestaurant() {
-        return restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
-        this.restaurant = restaurant;
     }
 }

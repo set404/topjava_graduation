@@ -12,12 +12,12 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 @JsonIgnoreProperties(value = "id")
 public class VoteTo extends BaseTo {
-    LocalDate actualDate;
+    LocalDate date;
     int restaurantId;
 
-    public VoteTo(Integer id, LocalDate actualDate, int restaurantId) {
+    public VoteTo(Integer id, LocalDate date, int restaurantId) {
         super(id);
-        this.actualDate = actualDate;
+        this.date = date;
         this.restaurantId = restaurantId;
     }
 }
