@@ -1,39 +1,23 @@
 package ru.javaops.topjava2.to;
 
-import ru.javaops.topjava2.HasId;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.Value;
 
-public class VoteTo extends BaseTo implements HasId {
-    private Integer id;
-    private String name;
-    private Long votes;
+import java.time.LocalDate;
 
-    public VoteTo() {
-    }
+@Value
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@JsonIgnoreProperties(value = "id")
+public class VoteTo extends BaseTo {
+    LocalDate actualDate;
+    int restaurantId;
 
-    public VoteTo(Integer id, String name, Long votes) {
-        this.id = id;
-        this.name = name;
-        this.votes = votes;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getVotes() {
-        return votes;
-    }
-
-    @Override
-    public String toString() {
-        return "ResultTo{" +
-                "restaurantId=" + id +
-                ", name='" + name + '\'' +
-                ", votes=" + votes +
-                '}';
+    public VoteTo(Integer id, LocalDate actualDate, int restaurantId) {
+        super(id);
+        this.actualDate = actualDate;
+        this.restaurantId = restaurantId;
     }
 }
