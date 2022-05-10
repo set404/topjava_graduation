@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 
 public class DishUtil {
     public static List<DishTo> getTos(Collection<Dish> dishes) {
-        return dishes.stream().map(DishUtil::createTo).collect(Collectors.toList());
+        return dishes.stream()
+                .map(DishUtil::createTo)
+                .collect(Collectors.toList());
     }
 
     public static DishTo createTo(Dish dish) {
