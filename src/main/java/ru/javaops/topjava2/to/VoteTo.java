@@ -8,15 +8,13 @@ import lombok.Value;
 import java.time.LocalDate;
 
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString(callSuper = true)
-@JsonIgnoreProperties(value = "id")
-public class VoteTo extends BaseTo {
+public class VoteTo{
     LocalDate date;
     int restaurantId;
 
-    public VoteTo(Integer id, LocalDate date, int restaurantId) {
-        super(id);
+    public VoteTo(LocalDate date, int restaurantId) {
         this.date = date;
         this.restaurantId = restaurantId;
     }

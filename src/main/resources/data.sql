@@ -22,4 +22,6 @@ VALUES (now(), 'Borsh', 200, 1),
 
 INSERT INTO VOTE (date, user_id, restaurant_id)
 VALUES (now(), 1, 1),
+       (now()-1, 1, 3),
+       (now()-2, 1, 2),
        (now(), 2, 3);
