@@ -56,7 +56,7 @@ public class AdminRestaurantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @CacheEvict(allEntries = true)
+   // @CacheEvict(allEntries = true)
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create restaurant {}", restaurant);
         checkNew(restaurant);
@@ -69,7 +69,7 @@ public class AdminRestaurantController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(allEntries = true)
+    //@CacheEvict(allEntries = true)
     public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
         log.info("update restaurant {}", id);
         restaurantRepository.findById(id);

@@ -42,10 +42,10 @@ public class AdminDishController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody DishTo to) {
+    public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody Dish to) {
         log.info("create from TO {}", to);
         checkNew(to);
-        Dish created = dishRepository.save(DishUtil.createFromTo(to));
+        Dish created = dishRepository.save(to);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
@@ -54,10 +54,10 @@ public class AdminDishController {
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody DishTo to, @PathVariable int id) {
+    public void update(@Valid @RequestBody Dish to, @PathVariable int id) {
         log.info("update from TO {}", to);
         assureIdConsistent(to, id);
-        dishRepository.save(DishUtil.createFromTo(to));
+        dishRepository.save(to);
     }
 
     @DeleteMapping("/{id}")
