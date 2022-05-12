@@ -32,7 +32,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserVoteController {
 
-    static final String REST_URL = "/api/vote";
+    static final String REST_URL = "/api/votes";
 
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
@@ -41,7 +41,7 @@ public class UserVoteController {
     @GetMapping
     public List<VoteTo> getAll(@AuthenticationPrincipal AuthUser authUser) {
         log.info("get all votes for user {}", authUser.id());
-        return VoteUtil.getTos(voteRepository.getAll(authUser.id()));
+        return VoteUtil.getTos(voteRepository.getAllForUser(authUser.id()));
     }
 
     @GetMapping("/today")
@@ -54,7 +54,7 @@ public class UserVoteController {
         } else {
             log.info("get votes by date {}", date);
         }
-        return voteRepository.getByDate(userId, voteDate).map(VoteUtil::createTo);
+        return voteRepository.getByDateForUser(userId, voteDate).map(VoteUtil::createTo);
     }
 
     @Transactional
@@ -65,7 +65,7 @@ public class UserVoteController {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(
                 () -> new IllegalRequestDataException("Restaurant id=" + restaurantId + " not found")
         );
-        Vote vote = voteRepository.getByDate(userId, LocalDate.now()).orElse(
+        Vote vote = voteRepository.getByDateForUser(userId, LocalDate.now()).orElse(
                 new Vote(LocalDate.now(), userRepository.getById(userId), restaurant)
         );
         if (vote.isNew()) {

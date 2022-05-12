@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javaops.topjava2.model.Dish;
 import ru.javaops.topjava2.repository.DishRepository;
-import ru.javaops.topjava2.to.DishTo;
-import ru.javaops.topjava2.util.DishUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -25,7 +23,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 @Slf4j
 @AllArgsConstructor
 public class AdminDishController {
-    public static final String REST_URL = "/api/admin/dish";
+    public static final String REST_URL = "/api/admin/dishes";
     private final DishRepository dishRepository;
 
     @GetMapping

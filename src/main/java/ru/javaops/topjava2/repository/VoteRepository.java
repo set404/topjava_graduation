@@ -15,9 +15,17 @@ import java.util.Optional;
 public interface VoteRepository extends BaseRepository<Vote> {
     @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT v FROM Vote v WHERE v.user.id=:userId AND v.date=:date")
-    Optional<Vote> getByDate(int userId, LocalDate date);
+    Optional<Vote> getByDateForUser(int userId, LocalDate date);
+
+    @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT v FROM Vote v WHERE v.date=:date")
+    List<Vote> getAllByDate(LocalDate date);
 
     @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.date DESC")
-    List<Vote> getAll(int userId);
+    List<Vote> getAllForUser(int userId);
+
+    @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
+    @Query("SELECT v FROM Vote v ORDER BY v.date DESC")
+    List<Vote> getAll();
 }

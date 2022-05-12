@@ -19,7 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserRestaurantController {
 
-    static final String REST_URL = "/api/restaurant";
+    static final String REST_URL = "/api/restaurants";
 
     private final RestaurantRepository repository;
 
