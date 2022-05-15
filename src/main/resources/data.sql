@@ -1,6 +1,6 @@
 INSERT INTO USERS (email, name, password)
-VALUES ('user@ya.ru', 'User', '{noop}password'),
-       ('admin@ya.ru', 'Admin', '{noop}password');
+VALUES ('user@yandex.ru', 'User', '{noop}password'),
+       ('admin@gmail.com', 'Admin', '{noop}password');
 
 INSERT INTO USER_ROLES (role, user_id)
 VALUES ('USER', 1),

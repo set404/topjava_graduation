@@ -19,3 +19,9 @@ Each restaurant provides a new menu each day.
 As a result, provide a link to github repository. It should contain the code, README.md with API documentation and couple curl commands to test it (**better - link to Swagger**).
 
 -----------------------------
+
+https://github.com/JavaWebinar/topjava/blob/doc/doc/graduation.md
+
+## Description
+
+<a href="http://localhost:8080/swagger-ui.html" rel="nofollow">REST API documentation Swagger UI</a>
