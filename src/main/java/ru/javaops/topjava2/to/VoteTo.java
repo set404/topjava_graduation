@@ -1,6 +1,5 @@
 package ru.javaops.topjava2.to;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
