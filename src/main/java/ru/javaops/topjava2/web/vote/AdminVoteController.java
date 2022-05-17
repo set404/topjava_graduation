@@ -29,11 +29,14 @@ public class AdminVoteController {
         return VoteUtil.getTos(voteRepository.getAll());
     }
 
-    @GetMapping("/today")
+    @GetMapping("/by-date")
     public List<VoteTo> get(@RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         LocalDate today = LocalDate.now();
         if (date == null) {
             log.info("get all votes by current date");
+        }
+        else {
+            log.info("get all votes by {}", date);
         }
         return VoteUtil.getTos(voteRepository.getAllByDate(today));
 

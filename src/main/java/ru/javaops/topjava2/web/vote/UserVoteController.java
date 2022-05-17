@@ -18,11 +18,13 @@ import ru.javaops.topjava2.repository.RestaurantRepository;
 import ru.javaops.topjava2.repository.UserRepository;
 import ru.javaops.topjava2.repository.VoteRepository;
 import ru.javaops.topjava2.to.VoteTo;
+import ru.javaops.topjava2.util.DateTimeUtil;
 import ru.javaops.topjava2.util.VoteUtil;
 import ru.javaops.topjava2.web.AuthUser;
 
 import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -46,7 +48,7 @@ public class UserVoteController {
     //Default date - today
     @GetMapping("/by-date")
     public VoteTo get(@AuthenticationPrincipal AuthUser authUser,
-                                @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+                      @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         int userId = authUser.id();
         LocalDate voteDate = (date == null) ? LocalDate.now() : date;
         if (date == null) {
@@ -79,12 +81,11 @@ public class UserVoteController {
                     .path(REST_URL).buildAndExpand().toUri();
             return ResponseEntity.created(uriOfNewResource).body(VoteUtil.createTo(created));
         }
-        if (vote.getRestaurant().id() == restaurantId) {
-            log.info("trying to vote for restaurant {} again", restaurantId);
-        } else {
-            log.info("user {} changed vote for restaurant {}", userId, restaurantId);
-            vote.setRestaurant(restaurant);
+        if (!LocalTime.now().isBefore(DateTimeUtil.getExpiredTime())) {
+        throw new IllegalRequestDataException("Voting ended at " + DateTimeUtil.getExpiredTime());
         }
+        log.info("user {} changed vote for restaurant {}", userId, restaurantId);
+        vote.setRestaurant(restaurant);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
