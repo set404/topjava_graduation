@@ -26,14 +26,15 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 @RequestMapping(value = AdminDishController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
+//@CacheConfig(cacheNames = "restaurants")
 public class AdminDishController {
-    public static final String REST_URL = "/api/admin/dishes/{restaurantId}";
+    public static final String REST_URL = "/api/admin/dishes/";
     private final DishRepository dishRepository;
     private final RestaurantRepository restaurantRepository;
 
 
     @GetMapping
-    public List<Dish> getAllByRestaurant(@PathVariable int restaurantId) {
+    public List<Dish> getAllByRestaurant(@RequestParam int restaurantId) {
         log.info("get All dishes for restaurant {}", restaurantId);
         return dishRepository.getAllByRestaurant(restaurantId);
     }
@@ -47,8 +48,9 @@ public class AdminDishController {
 
     @Transactional
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    //@CacheEvict(allEntries = true)
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody DishTo dishTo,
-                                                   @PathVariable int restaurantId) {
+                                                   @RequestParam int restaurantId) {
         log.info("add dish {} to restaurant {}", dishTo, restaurantId);
         checkNew(dishTo);
         Dish dish = DishUtil.createFromTo(dishTo);
@@ -61,16 +63,24 @@ public class AdminDishController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
+    @Transactional
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Dish to, @PathVariable int id) {
-        log.info("update from TO {}", to);
+    //@CacheEvict(allEntries = true)
+    public void update(@Valid @RequestBody DishTo to,
+                       @PathVariable int id,
+                       @RequestParam int restaurantId) {
+        log.info("update dish id = {} for restaurant = {}", id, restaurantId);
         assureIdConsistent(to, id);
-        dishRepository.save(to);
+        Dish dish = DishUtil.createFromTo(to);
+        dish.setRestaurant(restaurantRepository.getById(restaurantId));
+        dish.setDate(LocalDate.now());
+        dishRepository.save(dish);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    //@CacheEvict(allEntries = true)
     public void delete(@PathVariable int id) {
         log.info("delete {}", id);
         dishRepository.delete(id);

@@ -2,8 +2,6 @@ package ru.javaops.topjava2.web.restaurant;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,13 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.javaops.topjava2.error.IllegalRequestDataException;
 import ru.javaops.topjava2.model.Restaurant;
 import ru.javaops.topjava2.repository.RestaurantRepository;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
@@ -26,7 +24,7 @@ import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
 @RequestMapping(value = AdminRestaurantController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
 @AllArgsConstructor
-@CacheConfig(cacheNames = "restaurants")
+//@CacheConfig(cacheNames = "restaurants")
 public class AdminRestaurantController {
 
     static final String REST_URL = "/api/admin/restaurants";
@@ -34,9 +32,13 @@ public class AdminRestaurantController {
     private final RestaurantRepository restaurantRepository;
 
     @GetMapping("/{id}")
-    public Optional<Restaurant> get(@PathVariable int id) {
+    public Restaurant get(@PathVariable int id) {
         log.info("get restaurant {}", id);
-        return restaurantRepository.findById(id);
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+        if (restaurant == null) {
+            throw new IllegalRequestDataException("Restaurant id=" + id + " not found");
+        }
+        return restaurant;
     }
 
     @GetMapping
@@ -48,7 +50,7 @@ public class AdminRestaurantController {
     @Transactional
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CacheEvict(allEntries = true)
+    //@CacheEvict(allEntries = true)
     public void delete(@PathVariable int id) {
         log.info("delete restaurant {}", id);
         restaurantRepository.findById(id);
@@ -56,7 +58,7 @@ public class AdminRestaurantController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-   // @CacheEvict(allEntries = true)
+    //@CacheEvict(allEntries = true)
     public ResponseEntity<Restaurant> createWithLocation(@Valid @RequestBody Restaurant restaurant) {
         log.info("create restaurant {}", restaurant);
         checkNew(restaurant);
@@ -70,10 +72,15 @@ public class AdminRestaurantController {
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     //@CacheEvict(allEntries = true)
-    public void update(@Valid @RequestBody Restaurant restaurant, @PathVariable int id) {
+    public void update(@Valid @RequestBody Restaurant newRestaurant, @PathVariable int id) {
         log.info("update restaurant {}", id);
         restaurantRepository.findById(id);
-        assureIdConsistent(restaurant, id);
-        restaurantRepository.save(restaurant);
+        assureIdConsistent(newRestaurant, id);
+        Restaurant restaurant = restaurantRepository.findById(id).orElse(null);
+        if (restaurant == null) {
+            throw new IllegalRequestDataException("Restaurant id=" + id + " not found");
+        }
+        restaurantRepository.save(newRestaurant);
+
     }
 }

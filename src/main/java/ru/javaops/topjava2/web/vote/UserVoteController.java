@@ -24,7 +24,6 @@ import ru.javaops.topjava2.web.AuthUser;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = UserVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -44,8 +43,9 @@ public class UserVoteController {
         return VoteUtil.getTos(voteRepository.getAllForUser(authUser.id()));
     }
 
-    @GetMapping("/today")
-    public Optional<VoteTo> get(@AuthenticationPrincipal AuthUser authUser,
+    //Default date - today
+    @GetMapping("/by-date")
+    public VoteTo get(@AuthenticationPrincipal AuthUser authUser,
                                 @RequestParam @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         int userId = authUser.id();
         LocalDate voteDate = (date == null) ? LocalDate.now() : date;
@@ -54,7 +54,11 @@ public class UserVoteController {
         } else {
             log.info("get votes by date {}", date);
         }
-        return voteRepository.getByDateForUser(userId, voteDate).map(VoteUtil::createTo);
+        VoteTo vote = voteRepository.getByDateForUser(userId, voteDate).map(VoteUtil::createTo).orElse(null);
+        if (vote == null) {
+            throw new IllegalRequestDataException("Votes for = " + date + " not found");
+        }
+        return vote;
     }
 
     @Transactional
