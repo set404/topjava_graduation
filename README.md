@@ -25,3 +25,7 @@ https://github.com/JavaWebinar/topjava/blob/doc/doc/graduation.md
 ## Description
 
 <a href="http://localhost:8080/swagger-ui.html" rel="nofollow">REST API documentation Swagger UI</a>
+
+<strong>User login:</strong> user@yandex.ru<strong> / Password:</strong> password
+<br>
+<strong>Admin login:</strong> admin@gmail.com<strong> / Password:</strong> password
