@@ -25,7 +25,7 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
     void getByIdWithMenuToday() throws Exception {
         berega.setDishes(List.of(berega_dish2, berega_dish1));
 
-        perform(MockMvcRequestBuilders.get(REST_URL + BEREGA_ID + "/menu"))
+        perform(MockMvcRequestBuilders.get(REST_URL + BEREGA_ID + "/withMenu"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -37,7 +37,7 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
         berega.setDishes(List.of(berega_dish2, berega_dish1));
         ollis.setDishes(List.of(ollis_dish2, ollis_dish1));
         larisa.setDishes(List.of(larisa_dish1, larisa_dish2));
-        perform(MockMvcRequestBuilders.get(REST_URL + "menu"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "withMenu"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

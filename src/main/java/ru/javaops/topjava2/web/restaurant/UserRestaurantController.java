@@ -23,14 +23,14 @@ public class UserRestaurantController {
 
     private final RestaurantRepository restaurantRepository;
 
-    @GetMapping("/menu")
+    @GetMapping("/withMenu")
     //@Cacheable("restaurants")
     public List<RestaurantTo> getAllWithDishesToday() {
         log.info("get all restaurants with dishes today");
         return RestaurantUtil.getTos(restaurantRepository.getAllByDateWithDishes(LocalDate.now()));
     }
 
-    @GetMapping("/{id}/menu")
+    @GetMapping("/{id}/withMenu")
     public RestaurantTo getByIdWithDishesToday(@PathVariable int id) {
         log.info("get dishes from restaurant {} today", id);
         RestaurantTo restaurant = restaurantRepository.getByIdAndDateWithDishes(id, LocalDate.now()).map(RestaurantUtil::createTo).orElse(null);

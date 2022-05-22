@@ -2,9 +2,11 @@ package ru.javaops.topjava2.web.dish;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.javaops.topjava2.util.validation.ValidationUtil.assureIdConsistent;
 import static ru.javaops.topjava2.util.validation.ValidationUtil.checkNew;
@@ -50,12 +53,13 @@ public class AdminDishController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     //@CacheEvict(allEntries = true)
     public ResponseEntity<Dish> createWithLocation(@Valid @RequestBody DishTo dishTo,
+                                                   @RequestParam(required = false) @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                                    @RequestParam int restaurantId) {
         log.info("add dish {} to restaurant {}", dishTo, restaurantId);
         checkNew(dishTo);
         Dish dish = DishUtil.createFromTo(dishTo);
         dish.setRestaurant(restaurantRepository.getById(restaurantId));
-        dish.setDate(LocalDate.now());
+        dish.setDate(Objects.requireNonNullElseGet(date, LocalDate::now));
         Dish created = dishRepository.save(dish);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
