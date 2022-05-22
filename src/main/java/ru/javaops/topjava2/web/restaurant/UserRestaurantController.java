@@ -2,6 +2,9 @@ package ru.javaops.topjava2.web.restaurant;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.javaops.topjava2.error.IllegalRequestDataException;
@@ -24,7 +27,7 @@ public class UserRestaurantController {
     private final RestaurantRepository restaurantRepository;
 
     @GetMapping("/withMenu")
-    //@Cacheable("restaurants")
+    @Cacheable("restaurants")
     public List<RestaurantTo> getAllWithDishesToday() {
         log.info("get all restaurants with dishes today");
         return RestaurantUtil.getTos(restaurantRepository.getAllByDateWithDishes(LocalDate.now()));

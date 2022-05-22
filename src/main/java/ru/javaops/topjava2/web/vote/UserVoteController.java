@@ -27,6 +27,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import static ru.javaops.topjava2.util.validation.ValidationUtil.checkExpiredVoteTime;
+
 @RestController
 @RequestMapping(value = UserVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 @Slf4j
@@ -81,11 +83,11 @@ public class UserVoteController {
                     .path(REST_URL).buildAndExpand().toUri();
             return ResponseEntity.created(uriOfNewResource).body(VoteUtil.createTo(created));
         }
-        if (!LocalTime.now().isBefore(DateTimeUtil.getExpiredTime())) {
-        throw new IllegalRequestDataException("Voting ended at " + DateTimeUtil.getExpiredTime());
-        }
+        checkExpiredVoteTime();
         log.info("user {} changed vote for restaurant {}", userId, restaurantId);
         vote.setRestaurant(restaurant);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+
 }
